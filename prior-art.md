@@ -169,7 +169,7 @@ A protocol that took the best ideas from curvecp but also solved these two probl
   but he does still need to remember that is who he is talking to...)
 
 * what are the properties of a "box" exactly?
-  [answer](https://github.com/ssbc/scuttlebot/wiki/a-secure-secure-channel-(WIP)#crypto_box)
+  [answer](./draft2.md#crypto_box)
 
 ### Further Reading
 
