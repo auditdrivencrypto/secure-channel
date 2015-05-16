@@ -7,7 +7,7 @@ This is a project to design a secure-channel (encrypted duplex connection)
 
 This protocol will be developed in an audit-first style.
 The first phase was to study and summarize [prior art](./prior-art.md),
-then to summarize the [abstract properties](./properties.md) secure channels.
+then to summarize the [abstract properties](./properties.md) of secure channels.
 
 And then create draft proposals ([draft 1](./draft.md), [draft 2](./draft2.md)).
 
