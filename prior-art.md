@@ -8,7 +8,7 @@ so it may not be necessary to send the key inside the connection.
 
 ## private-stream
 
-[private-stream](https://github.com/dominictarr/private-stream) is a very simple private protocol that I wrote. It provides encryption, but not authentication. That is, you cannot be sure exactly who you are talking to, but you may be sure that no one else is listening. It is a symmetrical protocol, in that client and server handshake are identical. Each peer sends a Diffie Helman public key + an Initialization Vector (8 byte random number). The DH keys are combined to produce a shared key, and a cipher streams (salsa20) are constructed using the shared key and the two ivs so that each channel (A->B, and B->A) have the same key but different IVs (which is sufficient for security)
+[private-stream](https://github.com/dominictarr/private-stream) is a very simple private protocol that I wrote. It provides encryption, but not authentication. That is, you cannot be sure exactly who you are talking to, but you may be sure that no one else is listening. It is a symmetrical protocol, in that client and server handshake are identical. Each peer sends a Diffie Helman public key + an Initialization Vector (8 byte random number). The DH keys are combined to produce a shared key, and a cipher streams (salsa20) are constructed using the shared key and the two ivs so that each channel (A->B, and B->A) have the same key but different IVs (which is sufficient for privacy)
 
 I was considering putting authentication inside of this protocol but I am now re-evaluating that.
 
