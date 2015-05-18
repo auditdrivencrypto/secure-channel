@@ -17,7 +17,7 @@ I was considering putting authentication inside of this protocol but I am now re
 Alice and Bob meet in a dark alleyway
 
 Alice & Bob (simultaniously) passes each other a secret note, also with random number written on outside.
-i
+
 ``` js
 var local_kx = createKeyExchange()
 var local_nonce = secureRandom()
@@ -32,7 +32,7 @@ var remote_kx, remote_nonce = connection.read()
 ```
 
 Alice and Bob now combine their secret, with the secret they received and the random numbers,
-to communicate with each other.
+these are used to create the ciphers.
 
 ``` js
 var shared_key = local_kx.computeSecret(remote_kx)
@@ -64,14 +64,14 @@ Alice and Bob create key exchanges and nonces and send them to Mallory. Mallory 
 establishing private connections to each of them. When Alice or Bob send encrypted data, they send it to Mallory,
 who decrypts it, reads and possibly alters the plaintext, and reencrypts it the other party.
 Thus Mallory can read and alter all the data sent by Alice or Bob,
-who do not have anyway to know they are the victums of a middleman.
+who do not have anyway to know they are the victims of a middleman.
 
 * middleman can read and alter plaintext arbitarily.
 
 ### Replay attack on a private-stream.
 
-Rodger eaves drops on Alice and Bob's conversation, and then later
-connects to Bob and resends what Alice sent a previous time.
+Rodger eavesdrops on Alice and Bob's conversation, and then later
+connects to Bob and resends what Alice sent the previous time.
 
 Rodger sends the first packet Alice sent,
 which was the key exchange and nonce,
@@ -98,6 +98,8 @@ it would at least fail to decrypt those packets safely, without passing garbage 
 ### Key Compromise on private-stream
 
 not applicable, because private-stream does not verify remote identity.
+
+### Conclusion on private-stream
 
 ### Further Reading
 
