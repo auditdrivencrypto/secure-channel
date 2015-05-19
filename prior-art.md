@@ -8,7 +8,7 @@ so it may not be necessary to send the key inside the connection.
 
 ## private-stream
 
-[private-stream](https://github.com/dominictarr/private-stream) is a very simple private protocol that I wrote. It provides encryption, but not authentication. That is, you cannot be sure exactly who you are talking to, but you may be sure that no one else is listening. It is a symmetrical protocol, in that client and server handshake are identical. Each peer sends a Diffie Helman public key + an Initialization Vector (8 byte random number). The DH keys are combined to produce a shared key, and a cipher streams (salsa20) are constructed using the shared key and the two ivs so that each channel (A->B, and B->A) have the same key but different IVs (which is sufficient for security)
+[private-stream](https://github.com/dominictarr/private-stream) is a very simple private protocol that I wrote. It provides encryption, but not authentication. That is, you cannot be sure exactly who you are talking to, but you may be sure that no one else is listening. It is a symmetrical protocol, in that client and server handshake are identical. Each peer sends a Diffie Helman public key + an Initialization Vector (8 byte random number). The DH keys are combined to produce a shared key, and a cipher streams (salsa20) are constructed using the shared key and the two ivs so that each channel (A->B, and B->A) have the same key but different IVs (which is sufficient for privacy)
 
 I was considering putting authentication inside of this protocol but I am now re-evaluating that.
 
@@ -18,10 +18,88 @@ Alice and Bob meet in a dark alleyway
 
 Alice & Bob (simultaniously) passes each other a secret note, also with random number written on outside.
 
-> Alice and Bob now combine their secret, with the secret they received and the random numbers,
-> to communicate with each other.
+``` js
+var local_kx = createKeyExchange()
+var local_nonce = secureRandom()
+
+connection.write(local_kx, local_nonce)
+```
+
+Alice & Bob (~simultaniously) receives the remote note.
+
+``` js
+var remote_kx, remote_nonce = connection.read()
+```
+
+Alice and Bob now combine their secret, with the secret they received and the random numbers,
+these are used to create the ciphers.
+
+``` js
+var shared_key = local_kx.computeSecret(remote_kx)
+var encrypt = createCipher(shared_key, local_nonce)
+var decrypt = createCipher(shared_key, remote_nonce)
+```
+
+Then, wrap the insecure (tcp) connection in the ciphers,
+so that writes are passed to `encrypt` before `connection`,
+and reads from `connection` are passed to `decrypt` before they
+go to the application layer.
+
+``` js
+var privateConnection = wrap(connection, encrypt, decrypt)
+
+```
 
 Alice does not know who Bob is and vice versa, but no one can tell what they are saying either.
+
+Neither side confirms the public key of the remote, so private-stream does
+not defend against man in the middle attacks.
+
+### Man In The Middle attack on private-stream.
+
+Alice creates a connection that she thinks goes to bob, but it is intercepted by Mallory,
+Mallory guesses that she is trying to connect to Bob, and creates a connection to Bob.
+
+Alice and Bob create key exchanges and nonces and send them to Mallory. Mallory creates two exchange for Bob and for Alice,
+establishing private connections to each of them. When Alice or Bob send encrypted data, they send it to Mallory,
+who decrypts it, reads and possibly alters the plaintext, and reencrypts it the other party.
+Thus Mallory can read and alter all the data sent by Alice or Bob,
+who do not have anyway to know they are the victims of a middleman.
+
+* middleman can read and alter plaintext arbitarily.
+
+### Replay attack on a private-stream.
+
+Rodger eavesdrops on Alice and Bob's conversation, and then later
+connects to Bob and resends what Alice sent the previous time.
+
+Rodger sends the first packet Alice sent,
+which was the key exchange and nonce,
+But he doesn't generate a key exchange or nonce.
+Bob generates a key exchange and nonce and sends it to Rodger.
+
+Bob combines Alice's old key exchange with his new ones and
+initializes ciphers. Since bob created a new key exchange,
+he will not derive the same shared key as he did last time.
+Rodger sends the old packets that Alice sent last time,
+which uses a different key than last time, so when Bob
+decrypts it he gets randomness.
+
+In the current version of private-stream authenticated encryption is not used,
+so bob will have no way to detect this and it will be passed to the application layer,
+which will probably result in a parse error.
+
+If the protocol was upgraded to use authenticated encryption,
+it would at least fail to decrypt those packets safely, without passing garbage to the application layer.
+
+* replayer will cause garbage to be sent to application layer.
+* this could be fixed by using an authenticated cipher.
+
+### Key Compromise on private-stream
+
+not applicable, because private-stream does not verify remote identity.
+
+### Conclusion on private-stream
 
 ### Further Reading
 
