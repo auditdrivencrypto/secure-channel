@@ -23,6 +23,14 @@ This includes summarizing choices which were discarded, and for what reasons.
 Be thorough!
 If something is not in the documentation, it has not been decided.
 
+# Protocol Assumptions
+
+I assume an underlying reliable connection oriented transport.
+and that at least the client knows the public key of the server
+before they establish a connection to them.
+(it is assumed that the `{network_address, public_key}` pairing
+is pre-established via another channel)
+
 # License
 
 MI
