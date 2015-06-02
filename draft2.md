@@ -80,6 +80,6 @@ Now Alice and Bob are mutually authenticated! Bob knows he's talking to Alice, a
 
 the rest of the session is encrypted with Aaron/Barbara. Even the existence of these keys is a secret from both an eavesdropper or a man in the middle!
 
-This design realizes _all_ the [desirable secure channel properties](./properties.md)
+This design realizes _all_ the [desirable secret handshake properties](./properties.md)
 
 
