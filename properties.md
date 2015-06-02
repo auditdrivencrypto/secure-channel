@@ -1,7 +1,7 @@
 
-# Desireable Properties for a Secure Channel
+# Desireable Properties for a Secret Handshake
 
-here is a list of properties that I think are desirable in a p2p secure channel. It is assumed that peers already know the pubkeys of a server. It may not be possible to support _all_ of these properties in one protocol.
+here is a list of properties that I think are desirable in a p2p secret handshake. It is assumed that peers already know the pubkeys of a server. It may not be possible to support _all_ of these properties in one protocol.
 
 1. content is forward secure
 2. server verifies client identity

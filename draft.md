@@ -1,6 +1,6 @@
 # Protocol Draft 1
 
-Alice wants to connect to Bob and communicate privately. Also, we want to realize _all_ the [desireable properties for a secure channel](./properties.md). This protocol is inspired by [curvecp](./prior-art.md#curvecp) but avoid the [problems with curvecp](./prior-art.md#conclusion)
+Alice wants to connect to Bob and communicate privately. Also, we want to realize _all_ the [desireable properties for a secret handshake](./properties.md). This protocol is inspired by [curvecp](./prior-art.md#curvecp) but avoid the [problems with curvecp](./prior-art.md#conclusion)
 
 This also differs from curvecp in that it is intended to function as a layer on top of a reliable tcp-like connection, instead of a UDP protocol. Although curvecp does solve some tcp problems by using udp, for my usecase I require the ability to encrypt connections over an arbitrary reliable duplex stream (in particular over tcp, but potentially over other protocols too)
 

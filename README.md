@@ -1,7 +1,13 @@
 
-# secure-channel
+# secret-handshake
 
-This is a project to design a secure-channel (encrypted duplex connection)
+This is a project to design a secret handshake -
+a protocol to mutually authenticate two parties,
+and derive a shared secret.
+
+This shared secret could then be used to securely communicate
+via an encrytped and authenticated stream, though that has additional
+considerations which will not be discussed here.
 
 # design process
 
